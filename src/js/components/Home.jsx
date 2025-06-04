@@ -1,28 +1,45 @@
 import React from "react";
+import { useState, useEffect } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+const SecondsCounter = ({tiempoObjetivo}) => {
+	const [seconds, setSeconds] = useState(0);
 
-//create your first component
-const Home = () => {
+	// Aqui he usado useEffect para pasarle un intervalo de tiempo
+
+	useEffect (() => {
+		const interval = setInterval (() => {
+			setSeconds ((prev) => {
+				if (prev + 1 === tiempoObjetivo){
+					alert("Tieeeeeempo!");
+				}
+				return prev + 1;
+			});
+		}, 1000);
+
+		return () => clearInterval(interval);
+    }, [tiempoObjetivo]);
+
+	// Para que se aparezca bonito, creo un array de dígitos individuales
+
+	const digits = String(seconds).padStart(6,"0").split("");
+
+	// Y ya, devuelvo el contenedor con la magia hecha
+
 	return (
-		<div className="text-center">
-            
-
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="container mt-5 d-flex justify-content-center">
+			<div className="d-flex bg-dark text-white p-3 rounded gap-2 fs-1">
+				<div className="bg-secondary p-3 rounded">
+				<i className="fa-regular fa-clock"></i>
+				</div>
+				{digits.map((digit,index) => (
+				 <div key={index} className="bg-secondary p-3 rounded">
+					{digit}
+				</div>
+				))}
+			</div>
 		</div>
 	);
-};
 
-export default Home;
+	}
+
+	export default SecondsCounter;
